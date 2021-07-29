@@ -1,6 +1,9 @@
 package com.syncretis.springdatatraining.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,8 +17,18 @@ import java.util.List;
         name = "person"
 )
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class Person {
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", birthday=" + birthday +
+                ", department=" + department +
+                ", document=" + document +
+                '}';
+    }
 
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,18 +48,18 @@ public class Person {
     private LocalDate birthday;
 
     @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @NotNull(message = "Department ID cannot be null")
     private Department department;
 
-    @JoinTable(name = "person_to_language",
-            joinColumns = @JoinColumn(name = "person_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "language_id", referencedColumnName = "id"))
-    @ManyToMany(fetch = FetchType.EAGER)
-    @NotNull
+    @ManyToMany
+    @JoinTable(
+            name = "person_to_language",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "language_id"))
     private List<Language> languages;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
 

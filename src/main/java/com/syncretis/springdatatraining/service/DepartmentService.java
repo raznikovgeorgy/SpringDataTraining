@@ -31,9 +31,9 @@ public class DepartmentService {
     }
 
     public Department save(Department d) {
-//        if (validator.ValidateDepartment(d)) {
+        if (validator.ValidateDepartment(d)) {
             return departmentDao.save(d);
-//        }
-//        return null;
+        }
+        return null;
     }
 }

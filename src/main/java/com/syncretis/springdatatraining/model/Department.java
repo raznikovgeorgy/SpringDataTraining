@@ -27,7 +27,7 @@ public class Department {
     @Id
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     @NotNull(message = "Department Name cannot be null")
     private String name;
 
